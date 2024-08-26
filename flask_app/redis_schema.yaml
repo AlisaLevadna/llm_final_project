@@ -1,0 +1,35 @@
+index:
+  name: gdrive_index
+  prefix: gdrive_index/vector
+  key_separator: _
+  storage_type: hash
+fields:
+- name: id
+  type: tag
+  attrs:
+    sortable: false
+    separator: ','
+    case_sensitive: false
+    withsuffixtrie: false
+- name: doc_id
+  type: tag
+  attrs:
+    sortable: false
+    separator: ','
+    case_sensitive: false
+    withsuffixtrie: false
+- name: text
+  type: text
+  attrs:
+    sortable: false
+    weight: 1.0
+    no_stem: false
+    withsuffixtrie: false
+- name: vector
+  type: vector
+  attrs:
+    dims: 1536
+    algorithm: flat
+    datatype: float32
+    distance_metric: cosine
+version: 0.1.0
