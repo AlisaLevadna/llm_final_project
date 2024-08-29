@@ -1,9 +1,13 @@
-FROM tiangolo/uwsgi-nginx-flask:python3.11
+FROM python:3.11-slim
 
-ADD * /app
+WORKDIR /app
 
-RUN pip install -r /app/requirements.txt
+COPY . /app
+
+RUN pip install --no-cache-dir -r requirements.txt
+RUN python -m nltk.downloader punkt
 
 EXPOSE 9090
 
-ENTRYPOINT ["uwsgi", "--ini", "/app/app.ini"]
+# Run both Flask app and Slack bot
+CMD ["sh", "-c", "python /app/answer_questions_app.py & python /app/slack_bot.py"]
