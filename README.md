@@ -1,6 +1,6 @@
 # llm_final_project
 
-Steps to set up:
+Steps to set up locally, using docker:
 
 1. Create a project in Google Console, enable Google Drive API
 2. Create a Service Account https://console.developers.google.com/iam-admin/serviceaccounts, download the json with the key
