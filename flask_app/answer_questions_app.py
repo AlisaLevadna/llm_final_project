@@ -24,7 +24,7 @@ print("starting")
 socket_mode_handler = SocketModeHandler(slack_app, app.config["SLACK_APP_TOKEN"])
 
 
-# Settings.llm = Ollama(model="llama3.1:latest", request_timeout=120.0, base_url="http://host.docker.internal:11434") # for local ollama model
+# Settings.llm = Ollama(model="llama3.1:latest", request_timeout=120.0, base_url=app.config["MODEL_BASE_URL"]) # for local ollama model
 # Settings.embed_model =  OllamaEmbedding(
 #     model_name="nomic-embed-text",
 #     base_url=app.config["EMBEDDING_MODEL_BASE_URL"],
