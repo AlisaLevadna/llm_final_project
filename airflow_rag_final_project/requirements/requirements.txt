@@ -68,6 +68,8 @@ llama-index-cli==0.1.13
 llama-index-core==0.10.68.post1
 llama-index-embeddings-huggingface==0.2.3
 llama-index-embeddings-openai==0.1.11
+llama-index-llms-ollama==0.2.2
+llama-index-embeddings-ollama==0.2.0
 llama-index-indices-managed-llama-cloud==0.2.7
 llama-index-legacy==0.9.48.post1
 llama-index-llms-openai==0.1.29
@@ -153,3 +155,4 @@ urllib3==1.26.19
 wcwidth==0.2.13
 wrapt==1.16.0
 yarl==1.9.4
+
