@@ -28,7 +28,7 @@ fields:
 - name: vector
   type: vector
   attrs:
-    dims: 1536
+    dims: 1536 #for nomic-embed-text embedding - 768
     algorithm: flat
     datatype: float32
     distance_metric: cosine

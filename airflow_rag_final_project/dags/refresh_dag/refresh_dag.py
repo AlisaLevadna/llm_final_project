@@ -21,11 +21,11 @@ from googleapiclient.discovery import build
 from google.auth.transport.requests import Request
 from llama_index.vector_stores.redis import RedisVectorStore
 
-from llama_index.core import StorageContext
 from redis import Redis
 
-
 from llama_index.embeddings.openai import OpenAIEmbedding
+from llama_index.llms.ollama import Ollama
+from llama_index.embeddings.ollama import OllamaEmbedding
 from llama_index.core.ingestion import (
     DocstoreStrategy,
     IngestionPipeline,
@@ -35,9 +35,10 @@ from llama_index.storage.kvstore.redis import RedisKVStore as RedisCache
 from llama_index.storage.docstore.redis import RedisDocumentStore
 from llama_index.core.node_parser import SentenceSplitter
 from llama_index.vector_stores.redis import RedisVectorStore
-
+from llama_index.core import Settings
 from llama_index.core import VectorStoreIndex, SimpleDirectoryReader
 from redisvl.schema import IndexSchema
+
 
 
 SCOPES = ['https://www.googleapis.com/auth/drive',
@@ -99,16 +100,22 @@ def load_data(folder_id: str, service):
         doc.id_ = full_name
         if doc.metadata['mime type'] not in ['application/vnd.google-apps.document', 'application/vnd.google-apps.spreadsheet']:
             download_report(service, doc.metadata["file id"], f"{DAG_DIR}/refresh_dag/files/{doc.metadata['file name']}")
-    local_documents = SimpleDirectoryReader(f"{DAG_DIR}/refresh_dag/files/").load_data()
+    local_documents = []
+    if os.path.exists(f"{DAG_DIR}/refresh_dag/files/") and len(os.listdir(f"{DAG_DIR}/refresh_dag/files/")) > 0:
+        local_documents = SimpleDirectoryReader(f"{DAG_DIR}/refresh_dag/files/").load_data()
     return docs + local_documents
 
 def create_pipeline(vector_store):
-    embed_model = OpenAIEmbedding(model="text-embedding-ada-002")
-
     cache = IngestionCache(
     cache=RedisCache.from_host_and_port(Variable.get("redis_host"), 6379),
     collection="redis_gdrive_cache",
-)
+)   
+    # embed_model =  OllamaEmbedding(
+    # model_name="nomic-embed-text",
+    # base_url=Variable.get('embedding_base_url'),
+    # ) # for local ollama embedding
+    embed_model = OpenAIEmbedding(model="text-embedding-ada-002") # for OpenAI embedding
+    # cache.clear() # if need to clear the document cache - run redis-cli FLUSHALL and then ucnomment this for one rum 
     pipeline = IngestionPipeline(
         transformations=[
             SentenceSplitter(),
